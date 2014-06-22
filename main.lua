@@ -68,6 +68,42 @@ local topBoundary = display.newRect( display.contentCenterX, -40, display.actual
 topBoundary:setFillColor( 1,1,1  )
 physics.addBody( topBoundary, "static", {density=1, friction=0.2, bounce=0.4} )
 
+-- Creating a Cup
+local cupLeftX = display.contentWidth/2 - 30
+local cupRightX = display.contentWidth/2 + 30
+local cupHeight = display.contentCenterY +200
+
+local cupLeftWall = display.newRect(cupLeftX, cupHeight, 7,50)
+cupLeftWall:setFillColor("black")
+physics.addBody(cupLeftWall, "static", {density=1, friction=0.2, bounce=0.4})
+
+local cupRightWall= display.newRect(cupRightX, cupHeight, 7,50)
+cupRightWall:setFillColor("black")
+physics.addBody(cupRightWall, "static", {density=1, friction=0.2, bounce=0.4})
+--End Cup
+
+--ScoreBoard
+
+local score = 0
+
+-- Create first multi-line text object
+local options1 = 
+{
+    text = "Balls in Cup = " .. score,
+    y = -10,
+    x = 230,
+    width = 200,     --required for multi-line and alignment
+    font = native.systemFont,
+    fontSize = 18
+}
+
+
+
+local scoreBoard = display.newText( options1)
+scoreBoard:setFillColor( 1, 1, 1 )
+
+--EndScoreBoard
+
 local addBox = display.newRect( 50, 500, 50, 50 )
 local destroyBox = display.newRect(120,500,50,50)
 local forceBox = display.newRect(190, 500, 50, 50)
@@ -85,6 +121,35 @@ local force = function(event)
 	end
 
 end
+-- 132, 186, 416, 460
+local function ballWithinArea(ball, xLow, xHigh, yLow, yHigh)
+	--print(xLow .. " " .. xHigh .. " " .. yLow .. " " .. yHigh)
+	if (ball.x <= xHigh and ball.x >= xLow and ball.y >= yLow and ball.y <= yHigh) then
+		return true
+	end
+	return false
+end
+
+
+local function updateScore( event )
+	local count = 0
+    for k, v in pairs(crateList) do
+    	if(ballWithinArea(k, cupLeftX+2, cupRightX-2, 416, cupHeight+40))then
+    		count = count +1
+    	end
+    end
+    score = count
+    scoreBoard.text = "Balls in Cup = " .. score
+
+end
+
+timer.performWithDelay( 20, updateScore, 0 )
+
+local function onTouch(event)
+     print("POS.X = " .. event.x, "POS.Y = ".. event.y);
+end
+
+--Runtime:addEventListener("tap",onTouch);
 
 forceBox:setFillColor(1,1,1 )
 forceBox:addEventListener( "tap", force )
@@ -96,3 +161,4 @@ destroyBox:setFillColor(1,0,0)
 destroyBox:addEventListener( "tap", deleteAllCrates )
 
 
+-- 132, 186, 416, 460
