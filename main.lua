@@ -11,6 +11,8 @@
 ---------------------------------------------------------------------------------------
 
 local physics = require("physics")
+local cup = require("cup")
+
 physics.start()
 
 local sky = display.newImage( "bkg_clouds.png")
@@ -83,7 +85,7 @@ physics.addBody(cupRightWall, "static", {density=1, friction=0.2, bounce=0.4})
 --End Cup
 
 --ScoreBoard
-
+ 
 local score = 0
 
 -- Create first multi-line text object
@@ -159,6 +161,9 @@ addBox:addEventListener( "touch", spawnCrate )
 
 destroyBox:setFillColor(1,0,0)
 destroyBox:addEventListener( "tap", deleteAllCrates )
+
+local cup1 = cup.new("cup1",3)
+cup1:printWater()
 
 
 -- 132, 186, 416, 460
