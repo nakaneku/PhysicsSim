@@ -12,18 +12,11 @@
 
 local physics = require("physics")
 local cup = require("cup")
-
 physics.start()
 
-local sky = display.newImage( "bkg_clouds.png")
-sky.x = 160
-sky.y = 250
+local init =  require("initializeGame1")
 
-local ground = display.newImage( "ground.png")
-ground.x = 160
-ground.y = 500
 
-physics.addBody( ground, "static", {friction=0.5, bounce=0.0} )
 
 local crateList = {}
 
@@ -58,31 +51,13 @@ local function deleteAllCrates()
 	crateList = {}
 end
 
-local leftBoundary = display.newRect( 0, display.contentCenterY, 5, display.actualContentHeight )
-leftBoundary:setFillColor( 1,1,1 )
-physics.addBody( leftBoundary, "static", {density=1, friction=0.2, bounce=0.4} )
-
-local rightBoundary = display.newRect( display.contentWidth, display.contentCenterY, 5, display.actualContentHeight )
-rightBoundary:setFillColor( 1,1,1  )
-physics.addBody( rightBoundary, "static", {density=1, friction=0.2, bounce=0.4} )
-
-local topBoundary = display.newRect( display.contentCenterX, -40, display.actualContentWidth, 5 )
-topBoundary:setFillColor( 1,1,1  )
-physics.addBody( topBoundary, "static", {density=1, friction=0.2, bounce=0.4} )
-
 -- Creating a Cup
-local cupLeftX = display.contentWidth/2 - 30
-local cupRightX = display.contentWidth/2 + 30
-local cupHeight = display.contentCenterY +200
 
-local cupLeftWall = display.newRect(cupLeftX, cupHeight, 7,50)
-cupLeftWall:setFillColor("black")
-physics.addBody(cupLeftWall, "static", {density=1, friction=0.2, bounce=0.4})
+local cupX = 100
+local cupY = 100
+local cupHeight = 50
+local cupWidth = 40
 
-local cupRightWall= display.newRect(cupRightX, cupHeight, 7,50)
-cupRightWall:setFillColor("black")
-physics.addBody(cupRightWall, "static", {density=1, friction=0.2, bounce=0.4})
---End Cup
 
 --ScoreBoard
  
@@ -123,9 +98,8 @@ local force = function(event)
 	end
 
 end
--- 132, 186, 416, 460
+
 local function ballWithinArea(ball, xLow, xHigh, yLow, yHigh)
-	--print(xLow .. " " .. xHigh .. " " .. yLow .. " " .. yHigh)
 	if (ball.x <= xHigh and ball.x >= xLow and ball.y >= yLow and ball.y <= yHigh) then
 		return true
 	end
@@ -136,7 +110,7 @@ end
 local function updateScore( event )
 	local count = 0
     for k, v in pairs(crateList) do
-    	if(ballWithinArea(k, cupLeftX+2, cupRightX-2, 416, cupHeight+40))then
+    	if(ballWithinArea(k, cupX-cupWidth/2, cupX+cupWidth/2, cupY-cupHeight/2, cupY+cupHeight/2))then
     		count = count +1
     	end
     end
@@ -162,8 +136,9 @@ addBox:addEventListener( "touch", spawnCrate )
 destroyBox:setFillColor(1,0,0)
 destroyBox:addEventListener( "tap", deleteAllCrates )
 
-local cup1 = cup.new("cup1",3)
-cup1:printWater()
+
+local cup1 = cup.new(cupX, cupY, cupWidth, cupHeight, physics)
+
 
 
 -- 132, 186, 416, 460
