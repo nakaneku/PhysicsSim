@@ -16,39 +16,36 @@ physics.start()
 
 local init =  require("initializeGame1")
 
+local ballList = {}
 
-
-local crateList = {}
-
-local removeCrate = function( event )
+local removeBall = function( event )
 	event.target:removeSelf( )
-	crateList[event.target] = nil
+	ballList[event.target] = nil
 	event.target = nil
 
 end
 
-local function spawnCrate()
+local function spawnBall()
 	local x = math.random(40,290)
 	local y = 0
-	local crate = display.newCircle( x, y, 4)
-	crate:setFillColor( 1,0,0 )
-	crate.rotation = math.random(0,360)
-	physics.addBody( crate, {density=0.1, friction=0.5, bounce=0.2} )
-	crate:addEventListener( "touch", removeCrate)
-	crateList[crate] = crate
+	local ball = display.newCircle( x, y, 4)
+	ball:setFillColor( 1,0,0 )
+	ball.rotation = math.random(0,360)
+	physics.addBody( ball, {density=0.1, friction=0.5, bounce=0.2} )
+	ball:addEventListener( "touch", removeBall)
+	ballList[ball] = ball
 end
 
-local function deleteAllCrates()
-	for k, v in pairs(crateList) do
+local function deleteAllBalls()
+	for k, v in pairs(ballList) do
 		if (k ~= nil ) then
 			k:removeSelf( )
 			k = nil
-			table.remove(crateList, k)
-
+			table.remove(ballList, k)
 		end
 	end
-	crateList = nil
-	crateList = {}
+	ballList = nil
+	ballList = {}
 end
 
 -- Creating a Cup
@@ -57,6 +54,8 @@ local cupX = 100
 local cupY = 100
 local cupHeight = 50
 local cupWidth = 40
+
+local cup1 = cup.new(cupX, cupY, cupWidth, cupHeight, physics)
 
 
 --ScoreBoard
@@ -81,14 +80,11 @@ scoreBoard:setFillColor( 1, 1, 1 )
 
 --EndScoreBoard
 
-local addBox = display.newRect( 50, 500, 50, 50 )
-local destroyBox = display.newRect(120,500,50,50)
-local forceBox = display.newRect(190, 500, 50, 50)
 
 local force = function(event)
 	local xforce = math.random(20,50);
 	local yforce = math.random(20,50);
-	for k, v in pairs(crateList) do
+	for k, v in pairs(ballList) do
 		if(k ~= nil) then
 			if(xforce %2 == 0)then
 				xforce = -xforce
@@ -109,7 +105,7 @@ end
 
 local function updateScore( event )
 	local count = 0
-    for k, v in pairs(crateList) do
+    for k, v in pairs(ballList) do
     	if(ballWithinArea(k, cupX-cupWidth/2, cupX+cupWidth/2, cupY-cupHeight/2, cupY+cupHeight/2))then
     		count = count +1
     	end
@@ -125,20 +121,21 @@ local function onTouch(event)
      print("POS.X = " .. event.x, "POS.Y = ".. event.y);
 end
 
+
+local addBox = display.newRect( 50, 500, 50, 50 )
+local destroyBox = display.newRect(120,500,50,50)
+local forceBox = display.newRect(190, 500, 50, 50)
+
 --Runtime:addEventListener("tap",onTouch);
 
 forceBox:setFillColor(1,1,1 )
 forceBox:addEventListener( "tap", force )
 
 addBox:setFillColor( 0,1,0) 
-addBox:addEventListener( "touch", spawnCrate )
+addBox:addEventListener( "touch", spawnBall )
 
 destroyBox:setFillColor(1,0,0)
-destroyBox:addEventListener( "tap", deleteAllCrates )
-
-
-local cup1 = cup.new(cupX, cupY, cupWidth, cupHeight, physics)
+destroyBox:addEventListener( "tap", deleteAllBalls )
 
 
 
--- 132, 186, 416, 460
