@@ -28,11 +28,11 @@ end
 local function spawnBall()
 	local x = math.random(40,290)
 	local y = 0
-	local ball = display.newCircle( x, y, 4)
+	local ball = display.newCircle( x, y, 10)
 	ball:setFillColor( 1,0,0 )
 	ball.rotation = math.random(0,360)
 	physics.addBody( ball, {density=0.1, friction=0.5, bounce=0.2} )
-	ball:addEventListener( "touch", removeBall)
+	ball:addEventListener( "touch", ballDrag) --switch from removeBall
 	ballList[ball] = ball
 end
 
@@ -98,3 +98,21 @@ addBox:addEventListener( "touch", spawnBall )
 
 destroyBox:setFillColor(1,0,0)
 destroyBox:addEventListener( "tap", deleteAllBalls )
+
+
+--Adding individual ball force
+local initX
+local initY
+function ballDrag( event )
+
+	if (event.phase == "began") then
+		initX = event.x
+		initY = event.y		
+	elseif (event.phase == "moved") then
+		local newX = event.x
+		local newY = event.y
+		event.target:applyForce( newX - initX , newY - initY, event.target.x, event.target.y)
+	end
+
+end
+
