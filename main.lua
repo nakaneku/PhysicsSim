@@ -11,10 +11,10 @@
 ---------------------------------------------------------------------------------------
 
 local physics = require("physics")
-local cup = require("cup")
 physics.start()
-
+local cup = require("cup")
 local init =  require("initializeGame1")
+local scoreboard = require("scoreboard")
 
 local ballList = {}
 
@@ -56,30 +56,7 @@ local cupHeight = 50
 local cupWidth = 40
 
 local cup1 = cup.new(cupX, cupY, cupWidth, cupHeight, physics)
-
-
---ScoreBoard
- 
-local score = 0
-
--- Create first multi-line text object
-local options1 = 
-{
-    text = "Balls in Cup = " .. score,
-    y = -10,
-    x = 230,
-    width = 200,     --required for multi-line and alignment
-    font = native.systemFont,
-    fontSize = 18
-}
-
-
-
-local scoreBoard = display.newText( options1)
-scoreBoard:setFillColor( 1, 1, 1 )
-
---EndScoreBoard
-
+scoreboard.setCupArea(cupX, cupY, cupHeight, cupWidth)
 
 local force = function(event)
 	local xforce = math.random(20,50);
@@ -95,24 +72,9 @@ local force = function(event)
 
 end
 
-local function ballWithinArea(ball, xLow, xHigh, yLow, yHigh)
-	if (ball.x <= xHigh and ball.x >= xLow and ball.y >= yLow and ball.y <= yHigh) then
-		return true
-	end
-	return false
-end
 
-
-local function updateScore( event )
-	local count = 0
-    for k, v in pairs(ballList) do
-    	if(ballWithinArea(k, cupX-cupWidth/2, cupX+cupWidth/2, cupY-cupHeight/2, cupY+cupHeight/2))then
-    		count = count +1
-    	end
-    end
-    score = count
-    scoreBoard.text = "Balls in Cup = " .. score
-
+local function updateScore(event)
+	scoreboard.updateScore(ballList)
 end
 
 timer.performWithDelay( 20, updateScore, 0 )
@@ -136,6 +98,3 @@ addBox:addEventListener( "touch", spawnBall )
 
 destroyBox:setFillColor(1,0,0)
 destroyBox:addEventListener( "tap", deleteAllBalls )
-
-
-
