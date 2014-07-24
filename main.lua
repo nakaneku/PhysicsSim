@@ -12,11 +12,13 @@
 
 local physics = require("physics")
 physics.start()
+ballList = {}
 local cup = require("cup")
 local init =  require("initializeGame1")
 local scoreboard = require("scoreboard")
+local totalScore = require("RunningScore")
 
-local ballList = {}
+print("it hit originally")
 
 local removeBall = function( event )
 	event.target:removeSelf( )
@@ -100,15 +102,17 @@ destroyBox:setFillColor(1,0,0)
 destroyBox:addEventListener( "tap", deleteAllBalls )
 
 
---Adding individual ball force
 local initX
 local initY
-function ballDrag( event )
 
-	if (event.phase == "began") then
+--Adding individual ball force
+function ballDrag( event )
+	local phase = event.phase
+
+	if (phase == "began") then
 		initX = event.x
 		initY = event.y		
-	elseif (event.phase == "moved") then
+	elseif (phase == "moved") then
 		local newX = event.x
 		local newY = event.y
 		event.target:applyForce( newX - initX , newY - initY, event.target.x, event.target.y)
