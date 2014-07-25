@@ -18,7 +18,6 @@ local init =  require("initializeGame1")
 local scoreboard = require("scoreboard")
 local totalScore = require("RunningScore")
 
-print("it hit originally")
 
 local removeBall = function( event )
 	event.target:removeSelf( )

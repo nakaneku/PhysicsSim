@@ -8,7 +8,6 @@ local cup_mt = {__index = cup}
 
 local function onBallCupCollision(self, event)
 	local phase = event.phase
-	print("it hit ")
 	if(phase == "began") then
 		incrementScore()
 		event.other:removeSelf()
