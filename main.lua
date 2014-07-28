@@ -59,6 +59,14 @@ local cupWidth = 40
 local cup1 = cup.new(cupX, cupY, cupWidth, cupHeight, physics)
 scoreboard.setCupArea(cupX, cupY, cupHeight, cupWidth)
 
+local speed = -50
+local function moveCup()
+	cup1:move(-speed)
+	speed = -speed
+end
+
+timer.performWithDelay(3000, moveCup, 0)
+
 local force = function(event)
 	local xforce = math.random(20,50);
 	local yforce = math.random(20,50);

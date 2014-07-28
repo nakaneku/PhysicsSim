@@ -33,14 +33,23 @@ function cup.new(cupX, cupY, cupWidth, cupHeight, physics)
 	newCup.cupLeftWall:setFillColor("black")
 	newCup.cupRightWall:setFillColor("black")
 	newCup.cupBase:setFillColor( "black" )
-	newCup.physics.addBody(newCup.cupLeftWall, "static", {density=1, friction=0.2, bounce=0.4})
-	newCup.physics.addBody(newCup.cupRightWall, "static", {density=1, friction=0.2, bounce=0.4})
-	newCup.physics.addBody(newCup.cupBase, "static", {density=1, friction=0.2, bounce=0.4})
-	newCup.physics.addBody(newCup.cupScoreWall, "static", {density=1, friction=0.2, bounce=0.0})
+	newCup.physics.addBody(newCup.cupLeftWall, "kinematic", {density=1, friction=0.2, bounce=0.4})
+	newCup.physics.addBody(newCup.cupRightWall, "kinematic", {density=1, friction=0.2, bounce=0.4})
+	newCup.physics.addBody(newCup.cupBase, "kinematic", {density=1, friction=0.2, bounce=0.4})
+	newCup.physics.addBody(newCup.cupScoreWall, "kinematic", {density=1, friction=0.2, bounce=0.0})
 	newCup.collision = onBallCupCollision
 	newCup.cupScoreWall:addEventListener("collision", newCup)
 	return setmetatable( newCup, cup_mt )
 end
+
+function cup:move(speed)
+	self.cupLeftWall:setLinearVelocity(speed)
+	self.cupRightWall:setLinearVelocity(speed)
+	self.cupBase:setLinearVelocity(speed)
+	self.cupScoreWall:setLinearVelocity(speed)
+	print("all walls should move")
+end
+
 
 
 
