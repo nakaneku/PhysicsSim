@@ -47,7 +47,6 @@ function cup:move(speed)
 	self.cupRightWall:setLinearVelocity(speed)
 	self.cupBase:setLinearVelocity(speed)
 	self.cupScoreWall:setLinearVelocity(speed)
-	print("all walls should move")
 end
 
 

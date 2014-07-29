@@ -17,6 +17,7 @@ local cup = require("cup")
 local init =  require("initializeGame1")
 local scoreboard = require("scoreboard")
 local totalScore = require("RunningScore")
+local selectedBall
 
 
 local removeBall = function( event )
@@ -109,20 +110,26 @@ destroyBox:setFillColor(1,0,0)
 destroyBox:addEventListener( "tap", deleteAllBalls )
 
 
-local initX
-local initY
+local initX =0
+local initY =0
 
 --Adding individual ball force
 function ballDrag( event )
 	local phase = event.phase
 
 	if (phase == "began") then
+		print("began")
 		initX = event.x
-		initY = event.y		
-	elseif (phase == "moved") then
+		initY = event.y	
+		display.getCurrentStage( ):setFocus( event.target)	
+	elseif(false) then
+
+	elseif (phase == "ended") then
+		print("ended")
 		local newX = event.x
 		local newY = event.y
 		event.target:applyForce( newX - initX , newY - initY, event.target.x, event.target.y)
+		display.getCurrentStage( ):setFocus( nil )
 	end
 
 end
