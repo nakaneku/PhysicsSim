@@ -89,8 +89,26 @@ end
 
 timer.performWithDelay( 20, updateScore, 0 )
 
+local initTouchX
+local initTouchY
+local drawLine = nil
 local function onTouch(event)
      print("POS.X = " .. event.x, "POS.Y = ".. event.y);
+     if (event.phase == "began") then
+     	print("began hit")
+     	initTouchX = event.x
+     	initTouchY = event.y
+
+     elseif(event.phase == "moved") then
+     	drawLine = nil
+     	drawLine = display.newLine( initTouchX, initTouchY, event.x, event.y )
+     	drawLine:setStrokeColor(0.7,0,0.7)
+     	drawLine.strokeWidth = 3
+
+     elseif(event.phase == "ended") then
+
+     end
+
 end
 
 
@@ -98,7 +116,9 @@ local addBox = display.newRect( 50, 500, 50, 50 )
 local destroyBox = display.newRect(120,500,50,50)
 local forceBox = display.newRect(190, 500, 50, 50)
 
---Runtime:addEventListener("tap",onTouch);
+Runtime:addEventListener("touch",onTouch);
+
+
 
 forceBox:setFillColor(1,1,1 )
 forceBox:addEventListener( "tap", force )
@@ -122,7 +142,7 @@ function ballDrag( event )
 		initX = event.x
 		initY = event.y	
 		display.getCurrentStage( ):setFocus( event.target)	
-	elseif(false) then
+	elseif(phase == "moved") then
 
 	elseif (phase == "ended") then
 		print("ended")
